@@ -18,6 +18,7 @@ async function startApp(app, portIndex = 0) {
     }
     try {
         await app.listen(port);
+        console.log(`App is listening in port ${port}`);
     } catch (error) {
         await startApp(app, portIndex + 1);
     }

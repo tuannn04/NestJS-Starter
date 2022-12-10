@@ -4,6 +4,12 @@
 
 NestJS Starter is build from [NestJS](https://github.com/nestjs/nest) framework.
 
+## Pre-installation
+```bash
+1. MongoDB installed
+2. Create db and user based on .env file.
+```
+
 ## Installation
 
 ```bash

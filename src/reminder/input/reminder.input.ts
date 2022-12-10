@@ -1,4 +1,4 @@
-import {InputType, Field, DateScalarMode} from "@nestjs/graphql";
+import {InputType, Field} from "@nestjs/graphql";
 import {IsOptional, IsUrl} from "class-validator";
 import IsISO8601Format from "../decorator/class-validation/IsISO8601Format";
 

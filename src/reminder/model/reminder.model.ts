@@ -10,6 +10,9 @@ export class Reminder {
     }
 
     @Field(type => String, {nullable: true})
+    _id?: string;
+
+    @Field(type => String, {nullable: true})
     account_id: string
 
     @Field(type => String, {nullable: true})
