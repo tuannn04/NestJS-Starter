@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import mongoose, {Model} from 'mongoose';
 import {InjectModel} from "@nestjs/mongoose";
-import {Reminder, ReminderDocument, ReminderSchema} from "../schemas/reminder.schema";
+import {Reminder, ReminderDocument} from "../schemas/reminder.schema";
 import {ReminderDto} from "../dto/reminder.dto";
 import DatabaseConstant from "../constant/database.constant";
 import {SearchCriteriaDto} from "../../core/dto/search-criteria.dto";
@@ -20,12 +20,10 @@ export class ReminderService {
     }
 
     async findById(id: number | any): Promise<Reminder> {
-        const searchHandler = isNaN(id) ?
-            this.reminderModel.find({_id: new mongoose.Types.ObjectId(id)}) :
-            this.reminderModel.findById(+id);
+        const filter = {_id: isNaN(id) ? new mongoose.Types.ObjectId(id) : +id};
+        const searchHandler = this.reminderModel.findOne(filter);
         try {
-            const filterResult = await searchHandler.exec();
-            return filterResult[0];
+            return await searchHandler.exec();
         } catch (error) {
             throw error;
         }
@@ -34,7 +32,6 @@ export class ReminderService {
     async search(searchCriteria: SearchCriteriaDto | null): Promise<Reminder[]> {
         const processor = new CollectionProcessorService();
         const query = processor.process(this.reminderModel, searchCriteria);
-        const result = await query.exec();
-        return result;
+        return await query.exec();
     }
 }

@@ -11,5 +11,5 @@ export class FilterDto {
     value: string | any;
 
     @Field()
-    condition_type: string;
+    condition_type?: string;
 }

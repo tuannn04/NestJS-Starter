@@ -32,6 +32,12 @@ export class TokenService {
         }
     }
 
+    async getByAccessToken(accessToken: string): Promise<Token> {
+        const filter = {access_token: accessToken};
+        const query = this.tokenModel.findOne(filter);
+        return await query.exec();
+    }
+
     private generateAccessToken(): string {
         return randomBytes(TokenConstant.ACCESS_TOKEN_LENGTH).toString('hex');
     }

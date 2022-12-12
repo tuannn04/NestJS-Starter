@@ -4,6 +4,8 @@ import {ReminderService} from "../service/reminder.service";
 import {Reminder} from "../schemas/reminder.schema";
 import {ReminderDto} from "../dto/reminder.dto";
 import {SearchCriteriaDto} from "../../core/dto/search-criteria.dto";
+import {Authorization} from "../../authorization/decorators/Authorization";
+import TokenConstant from "../../authorization/constant/token.constant";
 
 @Controller('reminder')
 export class ReminderController {
@@ -16,6 +18,7 @@ export class ReminderController {
     }
 
     @Get('findById')
+    @Authorization({userTypes: [TokenConstant.USER_TYPE.ACCOUNT]})
     async findById(@Req() request: Request): Promise<Reminder> {
         const {query} = request;
         const result = await this.reminderService.findById(query.id);

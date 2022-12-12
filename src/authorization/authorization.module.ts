@@ -1,4 +1,4 @@
-import {Global, Module} from "@nestjs/common";
+import {Global, MiddlewareConsumer, Module, NestModule} from "@nestjs/common";
 import {ConfigModule} from "@nestjs/config";
 import {CoreModule} from "../core/core.module";
 import {AccountModule} from "../account/account.module";
@@ -6,6 +6,10 @@ import DatabaseConfiguration from "./config/database-configuration.config";
 import {ConfigService} from "./service/config.service";
 import {TokenService} from "./service/token.service";
 import {AccountResolver} from "./resolver/account.resolver";
+import {AuthorizationMiddleware} from "./middleware/authorization.middleware";
+import {AuthorizationContextService} from "./service/authorization-context.service";
+import {AuthorizationBearerService} from "./service/authorization-bearer.service";
+import {AuthorizationBearerProvider} from "./provider/authorization-bearer.provider";
 
 @Global()
 @Module({
@@ -20,8 +24,18 @@ import {AccountResolver} from "./resolver/account.resolver";
     providers: [
         ConfigService,
         TokenService,
-        AccountResolver
+        AccountResolver,
+        AuthorizationContextService,
+        AuthorizationBearerService,
+        AuthorizationBearerProvider
+    ],
+    exports: [
+        TokenService,
+        AuthorizationContextService
     ]
 })
-export class AuthorizationModule {
+export class AuthorizationModule  implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(AuthorizationMiddleware).forRoutes('*');
+    }
 }
